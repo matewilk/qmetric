@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "ava",
+    "test-debug": "node --inspect --debug-brk node_modules/ava/profile.js test/flattenTree.js",
     "dev": "chokidar '**/*.js' -c 'ava'"
   },
   "keywords": [],
