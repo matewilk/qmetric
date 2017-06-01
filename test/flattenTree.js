@@ -4,7 +4,7 @@ const answers = require('../examples/answers');
 const output = require('../examples/expectedOutput');
 const questionset = require('../examples/questionset');
 
-const { flattenTree, parser } = require('../lib/flattenTree');
+const { flattenTree, parse } = require('../lib/flattenTree');
 
 
 test.todo('flattens correctly the provided examples');
@@ -14,7 +14,7 @@ test('flatten tree should return a correct answer', t => {
 });
 
 test('should match answers with questionset ids', t => {
-    t.is(parser(), '123', '123');
+    t.is(parse(), '123', '123');
 });
 
 test('should be able to recognise the type of the question', t => {
