@@ -4,31 +4,61 @@ const answers = require('../examples/answers');
 const output = require('../examples/expectedOutput');
 const questionset = require('../examples/questionset');
 
-const { flattenTree, parse } = require('../lib/flattenTree');
+const {
+		flattenTree,
+		parse,
+		createOutputRecord,
+		appendId,
+		appendTrigger,
+		filterGroup
+} = require('../lib/flattenTree');
 
 
-test.todo('flattens correctly the provided examples');
-
-test('flatten tree should return a correct answer', t => {
-    t.is(flattenTree(questionset, answers), output);
+test('flattenTree function should return the correct answer', t => {
+		let out = flattenTree(questionset, answers);
+    t.deepEqual(out, output);
 });
 
-test('should match answers with questionset ids', t => {
-    // t.is(parse(), '123', '123');
+test('createOutputRecord should return object with 3 properties', t => {
+		let question = {id: 1, type: 'integer', question: 'question', rubish: 'do not want'};
+		let obj = createOutputRecord(question, '123');
+
+		t.deepEqual(obj, {id: '123', type: 'number', text: 'question'});
 });
 
-test('should be able to recognise the type of the question', t => {
+test('appendId should return item.id if second param is empty string', t => {
+		let item = {id: 'abc'};
+		let out = appendId(item, '');
 
+		t.is(out, 'abc');
 });
 
-test('should recursively parse question object', t => {
+test('appendId should return prepend second param to item.id', t => {
+		let item = {id: 'abc'};
+		let out = appendId(item, 'abc');
 
+		t.is(out, 'abc-abc');
 });
 
-test('should look for a question trigger', t => {
+test('filterGroup should return true if trigger is equal item.trigger', t => {
+		let item = {trigger: 'test'};
+		let trigger = {trigger: 'test'};
+		let out = filterGroup(trigger)(item);
 
+		t.is(out, true);
 });
 
-test('should build an output object on each level', t => {
+test('filterGroup should return false if trigger is not equal item.trigger', t => {
+		let item = {trigger: 'test'};
+		let trigger = {trigger: 'no-no-no'};
+		let out = filterGroup(trigger)(item);
 
+		t.is(out, false);
+});
+
+test('filterGroup should return false if trigger does not exist', t => {
+		let item = {trigger: 'test'};
+		let out = filterGroup()(item);
+
+		t.is(out, false);
 });
